@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета участника — ИИ в работе руководителя</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #f4f5f7; color: #1f2933; line-height: 1.5; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  header { background: #1f3a5f; color: #fff; border-radius: 12px; padding: 28px 24px; margin-bottom: 20px; }
+  header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  header p { font-size: 14px; opacity: .9; }
+  .meta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px; font-size: 13px; }
+  .meta span { background: rgba(255,255,255,.14); border-radius: 6px; padding: 4px 10px; }
+  .block { background: #fff; border-radius: 12px; padding: 22px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
+  .block h2 { font-size: 16px; font-weight: 700; color: #1f3a5f; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e4e7eb; }
+  .q { margin-bottom: 18px; }
+  .q:last-child { margin-bottom: 0; }
+  .q-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+  .q-title .req { color: #c0392b; margin-left: 2px; }
+  .opt { display: block; font-size: 14px; padding: 7px 10px; border-radius: 8px; cursor: pointer; border: 1px solid transparent; }
+  .opt:hover { background: #f0f3f7; }
+  .opt input { margin-right: 8px; }
+  input[type=text], textarea { width: 100%; border: 1px solid #cbd2d9; border-radius: 8px; padding: 9px 12px; font-size: 14px; font-family: inherit; }
+  textarea { min-height: 84px; resize: vertical; }
+  table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.grid th, table.grid td { border: 1px solid #e4e7eb; padding: 8px 6px; text-align: center; }
+  table.grid th { background: #f7f8fa; font-weight: 600; }
+  table.grid td:first-child, table.grid th:first-child { text-align: left; }
+  .error-msg { color: #c0392b; font-size: 13px; margin-top: 6px; display: none; }
+  button.submit { width: 100%; background: #1f3a5f; color: #fff; border: none; border-radius: 10px; padding: 15px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+  button.submit:hover { background: #2a4a75; }
+  button.submit:disabled { background: #9aa5b1; cursor: wait; }
+  #thanks { display: none; text-align: center; padding: 48px 24px; }
+  #thanks h2 { color: #1f3a5f; font-size: 24px; margin-bottom: 12px; }
+  #thanks p { color: #52606d; font-size: 15px; }
+  .note { font-size: 12px; color: #7b8794; margin-top: 6px; }
+  @media (max-width: 560px) { .meta { flex-direction: column; } table.grid { font-size: 12px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Анкета участника обучения</h1>
+    <p>«ИИ в работе руководителя» — программа для холдинга. Результаты используются для планирования занятий: рассадка, дифференциация практики, приоритетные кейсы.</p>
+    <div class="meta">
+      <span>5–7 минут</span>
+      <span>15 вопросов</span>
+      <span>Ответы не проверяются и не оцениваются</span>
+    </div>
+  </header>
+
+  <form id="survey">
+    <div class="block">
+      <h2>Блок 1. Идентификация</h2>
+      <div class="q">
+        <div class="q-title">1. Фамилия и имя<span class="req">*</span></div>
+        <input type="text" name="full_name" required placeholder="Иванов Иван">
+      </div>
+      <div class="q">
+        <div class="q-title">2. Функция в холдинге<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="function" value="Руководитель проектов / строительных объектов" required> Руководитель проектов / строительных объектов</label>
+        <label class="opt"><input type="radio" name="function" value="Снабжение / закупки"> Снабжение / закупки</label>
+        <label class="opt"><input type="radio" name="function" value="Проектирование"> Проектирование</label>
+        <label class="opt"><input type="radio" name="function" value="Экономика / финансы"> Экономика / финансы</label>
+        <label class="opt"><input type="radio" name="function" value="HR"> HR</label>
+        <label class="opt"><input type="radio" name="function" value="Другое"> Другое</label>
+      </div>
+      <div class="q">
+        <div class="q-title">3. Площадка / офис</div>
+        <input type="text" name="location" placeholder="Например: головной офис / объект N">
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>Блок 2. Уровень владения инструментами</h2>
+      <div class="q">
+        <div class="q-title">4. Как часто вы используете ИИ в работе?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="frequency" value="Не пользовался(ась)" required> Не пользовался(ась)</label>
+        <label class="opt"><input type="radio" name="frequency" value="Пробовал(а) несколько раз"> Пробовал(а) несколько раз</label>
+        <label class="opt"><input type="radio" name="frequency" value="Время от времени"> Использую время от времени (раз в неделю и реже)</label>
+        <label class="opt"><input type="radio" name="frequency" value="Регулярно"> Использую регулярно (несколько раз в неделю)</label>
+        <label class="opt"><input type="radio" name="frequency" value="Ежедневно"> Использую ежедневно или почти ежедневно</label>
+      </div>
+      <div class="q">
+        <div class="q-title">5. Какие инструменты вы использовали за последние 3 месяца?</div>
+        <div class="note">Отметить всё, что подходит</div>
+        <label class="opt"><input type="checkbox" name="tools" value="ChatGPT"> ChatGPT</label>
+        <label class="opt"><input type="checkbox" name="tools" value="YandexGPT / Алиса"> YandexGPT / Алиса</label>
+        <label class="opt"><input type="checkbox" name="tools" value="DeepSeek"> DeepSeek</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Claude"> Claude</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Gemini"> Gemini</label>
+        <label class="opt"><input type="checkbox" name="tools" value="GigaChat / Сбер"> GigaChat / Сбер</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Qwen / Kimi"> Qwen / Kimi</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Генерация изображений"> Генерация изображений (Кандинский, Шедеврум, Midjourney и др.)</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Транскрибация совещаний"> Транскрибация совещаний (SpeechKit, MyMeet и др.)</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Excel / Sheets с ИИ"> Excel / Google Sheets с ИИ</label>
+        <label class="opt"><input type="checkbox" name="tools" value="ИИ для презентаций"> ИИ для презентаций</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Готовые агенты / чат-боты"> Готовые агенты / чат-боты (GPTs, LobeHub и др.)</label>
+        <label class="opt"><input type="checkbox" name="tools" value="n8n / Make"> n8n / Make и другие автоматизации</label>
+        <label class="opt"><input type="checkbox" name="tools" value="Не использовал ни одного"> Не использовал(а) ни одного из перечисленного</label>
+      </div>
+      <div class="q">
+        <div class="q-title">6. Что вы обычно делаете с помощью ИИ?</div>
+        <div class="note">Отметить всё, что подходит</div>
+        <label class="opt"><input type="checkbox" name="activities" value="Письма и переписка"> Письма и деловая переписка</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Анализ документов и договоров"> Анализ документов и договоров</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Таблицы и расчёты"> Работа с таблицами и расчётами</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Подготовка отчётов"> Подготовка отчётов</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Поиск и обобщение информации"> Поиск и обобщение информации</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Перевод"> Перевод</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Мозговой штурм"> Мозговой штурм и генерация идей</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Генерация изображений"> Генерация изображений</label>
+        <label class="opt"><input type="checkbox" name="activities" value="Презентации"> Подготовка презентаций</label>
+      </div>
+      <div class="q">
+        <div class="q-title">7. Как обычно строится ваша работа с ИИ?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="interaction" value="Один вопрос — один ответ" required> Задаю вопрос и беру готовый ответ</label>
+        <label class="opt"><input type="radio" name="interaction" value="Уточнения и итерации"> Уточняю, задаю дополнительные вопросы, несколько итераций</label>
+        <label class="opt"><input type="radio" name="interaction" value="Даю контекст и файлы"> Даю ИИ контекст и файлы (документы, таблицы)</label>
+        <label class="opt"><input type="radio" name="interaction" value="Через готового агента"> Работаю через готового агента или ассистента</label>
+        <label class="opt"><input type="radio" name="interaction" value="Не работаю с ИИ"> Не работаю с ИИ</label>
+      </div>
+      <div class="q">
+        <div class="q-title">8. Что мешает использовать ИИ в работе?</div>
+        <div class="note">Отметить всё, что подходит</div>
+        <label class="opt"><input type="checkbox" name="barriers" value="Не вижу подходящих задач"> Не вижу подходящих задач</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Безопасность и конфиденциальность"> Безопасность и конфиденциальность данных</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Нет времени разбираться"> Нет времени разбираться</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Не знаю, с чего начать"> Не знаю, с чего начать</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Кажется сложным"> Кажется сложным («не технарь»)</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Нет доступа / платных подписок"> Нет доступа / платных подписок</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Качество ответов"> Не устраивает качество ответов</label>
+        <label class="opt"><input type="checkbox" name="barriers" value="Ничего не мешает"> Ничего не мешает</label>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>Блок 3. Осведомлённость о моделях и инструментах</h2>
+      <div class="q">
+        <div class="q-title">9. Модели — отметьте степень знакомства</div>
+        <table class="grid" id="modelsGrid">
+          <tr><th>Модель / сервис</th><th>Знаю и пробовал(а)</th><th>Слышал(а)</th><th>Не знакомо</th></tr>
+        </table>
+      </div>
+      <div class="q">
+        <div class="q-title">10. Инструменты и концепции — отметьте степень знакомства</div>
+        <table class="grid" id="instrumentsGrid">
+          <tr><th>Инструмент / концепция</th><th>Знаю и пробовал(а)</th><th>Слышал(а)</th><th>Не знакомо</th></tr>
+        </table>
+      </div>
+      <div class="q">
+        <div class="q-title">11. Есть ли у вас опыт создания своих агентов или чат-ботов под рабочие задачи?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="agents_experience" value="Да, использую регулярно" required> Да, использую регулярно</label>
+        <label class="opt"><input type="radio" name="agents_experience" value="Пробовал(а)"> Пробовал(а)</label>
+        <label class="opt"><input type="radio" name="agents_experience" value="Нет"> Нет</label>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>Блок 4. Запросы на автоматизацию</h2>
+      <div class="q">
+        <div class="q-title">12. Какие задачи забирают больше всего времени?</div>
+        <div class="note">Выбрать не более 5</div>
+        <div id="tasksWrap"></div>
+      </div>
+      <div class="q">
+        <div class="q-title">13. Сколько часов в неделю уходит на рутинную работу, которую хотелось бы автоматизировать?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="routine_hours" value="Менее 2 часов" required> Менее 2 часов</label>
+        <label class="opt"><input type="radio" name="routine_hours" value="2–5 часов"> 2–5 часов</label>
+        <label class="opt"><input type="radio" name="routine_hours" value="5–10 часов"> 5–10 часов</label>
+        <label class="opt"><input type="radio" name="routine_hours" value="Более 10 часов"> Более 10 часов</label>
+      </div>
+      <div class="q">
+        <div class="q-title">14. Какую задачу своей функции в первую очередь хотелось бы научиться решать с помощью ИИ?</div>
+        <textarea name="priority_task" placeholder="1–3 предложения"></textarea>
+      </div>
+      <div class="q">
+        <div class="q-title">15. Готовы ли вы к домашним заданиям по 15–30 минут в неделю на реальных рабочих материалах?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="homework_ready" value="Да" required> Да</label>
+        <label class="opt"><input type="radio" name="homework_ready" value="Скорее да"> Скорее да</label>
+        <label class="opt"><input type="radio" name="homework_ready" value="Затрудняюсь ответить"> Затрудняюсь ответить</label>
+      </div>
+    </div>
+
+    <div class="error-msg" id="err"></div>
+    <button type="submit" class="submit" id="btn">Отправить ответы</button>
+    <div class="note" style="text-align:center;margin-top:10px">Анкета анонимна для других участников. Ответы видит только тренер и куратор программы.</div>
+  </form>
+
+  <div id="thanks">
+    <h2>Спасибо, ответы приняты</h2>
+    <p>Результаты используются при подготовке программы. До встречи на занятии.</p>
+  </div>
+</div>
+
+<script>
+var SCRIPT_URL = "REPLACE_WITH_APPS_SCRIPT_URL";
+
+var MODELS = ["ChatGPT","YandexGPT","DeepSeek","Claude","Gemini","GigaChat / Сбер","Qwen","Kimi"];
+var INSTRUMENTS = ["Загрузка файлов в чат","ИИ в Excel / Google Sheets","Транскрибация аудиозаписей","Генерация изображений","ИИ-презентации","API-ключи и подключение моделей","Локальные модели на своём оборудовании","ИИ-агенты с инструментами (почта, файлы, календарь)","MCP (подключение внешних сервисов к агенту)","n8n / Make (автоматизация процессов)","Корпоративные контуры для работы с ИИ"];
+var TASKS = ["План-факт, отчётность по проектам","Работа со сметами","Анализ КП поставщиков","Договоры, протоколы разногласий","Переписка с заказчиками и подрядчиками","Протоколы совещаний и планерок","Отчёты с объектов","Анализ резюме, подбор персонала","Подготовка регламентов и внутренних документов","Расчёты заработной платы и премий"];
+var SCALE = ["Знаю и пробовал(а)","Слышал(а)","Не знакомо"];
+
+function buildGrid(tableId, items, namePrefix) {
+  var t = document.getElementById(tableId);
+  items.forEach(function(item, i) {
+    var tr = document.createElement("tr");
+    var tdName = document.createElement("td");
+    tdName.textContent = item;
+    tr.appendChild(tdName);
+    SCALE.forEach(function(opt) {
+      var td = document.createElement("td");
+      var label = document.createElement("label");
+      label.style.display = "flex";
+      label.style.justifyContent = "center";
+      var r = document.createElement("input");
+      r.type = "radio";
+      r.name = namePrefix + "|" + item;
+      r.value = opt;
+      label.appendChild(r);
+      td.appendChild(label);
+      tr.appendChild(td);
+    });
+    t.appendChild(tr);
+  });
+}
+
+function buildTasks() {
+  var wrap = document.getElementById("tasksWrap");
+  TASKS.forEach(function(task) {
+    var label = document.createElement("label");
+    label.className = "opt";
+    var cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.name = "top_tasks";
+    cb.value = task;
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(task));
+    wrap.appendChild(label);
+  });
+  wrap.addEventListener("change", function(e) {
+    if (e.target.name !== "top_tasks") return;
+    var checked = wrap.querySelectorAll("input[name=top_tasks]:checked");
+    if (checked.length > 5) {
+      e.target.checked = false;
+      var err = document.getElementById("err");
+      err.textContent = "Не более 5 задач";
+      err.style.display = "block";
+      setTimeout(function(){ err.style.display = "none"; }, 2500);
+    }
+  });
+}
+
+buildGrid("modelsGrid", MODELS, "models");
+buildGrid("instrumentsGrid", INSTRUMENTS, "instruments");
+buildTasks();
+
+function collectGrid(namePrefix) {
+  var out = {};
+  var inputs = document.querySelectorAll("input[name^='" + namePrefix + "|']:checked");
+  inputs.forEach(function(inp) {
+    var row = inp.name.split("|")[1];
+    out[row] = inp.value;
+  });
+  return out;
+}
+
+document.getElementById("survey").addEventListener("submit", function(e) {
+  e.preventDefault();
+  var form = e.target;
+  var err = document.getElementById("err");
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+  var checked = function(name) {
+    return Array.prototype.map.call(form.querySelectorAll("input[name='" + name + "']:checked"), function(i){ return i.value; });
+  };
+  var payload = {
+    timestamp: new Date().toISOString(),
+    full_name: form.full_name.value.trim(),
+    function: form.function.value,
+    location: form.location.value.trim(),
+    frequency: form.frequency.value,
+    tools: checked("tools"),
+    activities: checked("activities"),
+    interaction: form.interaction.value,
+    barriers: checked("barriers"),
+    models: collectGrid("models"),
+    instruments: collectGrid("instruments"),
+    agents_experience: form.agents_experience.value,
+    top_tasks: checked("top_tasks"),
+    routine_hours: form.routine_hours.value,
+    priority_task: form.priority_task.value.trim(),
+    homework_ready: form.homework_ready.value
+  };
+  var btn = document.getElementById("btn");
+  btn.disabled = true;
+  btn.textContent = "Отправка…";
+  var done = function() {
+    document.getElementById("survey").style.display = "none";
+    document.getElementById("thanks").style.display = "block";
+    window.scrollTo(0, 0);
+  };
+  if (SCRIPT_URL.indexOf("REPLACE_WITH") !== -1) {
+    console.log("DEV payload:", payload);
+    setTimeout(done, 600);
+    return;
+  }
+  fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+    .catch(function(){})
+    .then(function(){ setTimeout(done, 400); });
+});
+</script>
+</body>
+</html>
