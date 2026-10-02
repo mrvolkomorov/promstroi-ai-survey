@@ -45,8 +45,8 @@
     <h1>Анкета участника обучения</h1>
     <p>«ИИ в работе руководителя» — программа для холдинга. Результаты используются для планирования занятий: рассадка, дифференциация практики, приоритетные кейсы.</p>
     <div class="meta">
-      <span>5–7 минут</span>
-      <span>15 вопросов</span>
+      <span>7–9 минут</span>
+      <span>20 вопросов</span>
       <span>Ответы не проверяются и не оцениваются</span>
     </div>
   </header>
@@ -159,7 +159,38 @@
     </div>
 
     <div class="block">
-      <h2>Блок 4. Запросы на автоматизацию</h2>
+      <h2>Блок 4. Отношение к ИИ: опасения и скептицизм</h2>
+      <div class="q">
+        <div class="q-title">16. Как вы в целом относитесь к использованию ИИ в работе?<span class="req">*</span></div>
+        <label class="opt"><input type="radio" name="ai_attitude" value="Активно поддерживаю" required> Активно поддерживаю, сам продвигаю использование</label>
+        <label class="opt"><input type="radio" name="ai_attitude" value="Положительно, осторожно"> Положительно, внедряю осторожно</label>
+        <label class="opt"><input type="radio" name="ai_attitude" value="Нейтрально"> Нейтрально: жду практической пользы, пока не убеждён(а)</label>
+        <label class="opt"><input type="radio" name="ai_attitude" value="Скептически"> Скептически: больше сомнений, чем ожиданий</label>
+        <label class="opt"><input type="radio" name="ai_attitude" value="Отрицательно"> Отрицательно: считаю избыточным или вредным</label>
+      </div>
+      <div class="q">
+        <div class="q-title">17. Что именно вызывает опасения или сомнения?</div>
+        <div class="note">Не более 5</div>
+        <div id="concernsWrap"></div>
+      </div>
+      <div class="q">
+        <div class="q-title">18. Что усилило бы ваше доверие к ИИ как рабочему инструменту?</div>
+        <div class="note">Не более 3</div>
+        <div id="trustWrap"></div>
+      </div>
+      <div class="q">
+        <div class="q-title">19. Откуда вы в основном узнаёте об ИИ?</div>
+        <div class="note">Отметить всё, что подходит</div>
+        <div id="sourcesWrap"></div>
+      </div>
+      <div class="q">
+        <div class="q-title">20. Есть ли у вас опыт или случай, который усилил скепсис?</div>
+        <textarea name="skepticism_experience" placeholder="Личный опыт, история коллеги, случай на объекте — если было. Можно оставить пустым."></textarea>
+      </div>
+    </div>
+
+    <div class="block">
+      <h2>Блок 5. Запросы на автоматизацию</h2>
       <div class="q">
         <div class="q-title">12. Какие задачи забирают больше всего времени?</div>
         <div class="note">Выбрать не более 5</div>
@@ -202,6 +233,9 @@ var MODELS = ["ChatGPT","YandexGPT","DeepSeek","Claude","Gemini","GigaChat / С�
 var INSTRUMENTS = ["Загрузка файлов в чат","ИИ в Excel / Google Sheets","Транскрибация аудиозаписей","Генерация изображений","ИИ-презентации","API-ключи и подключение моделей","Локальные модели на своём оборудовании","ИИ-агенты с инструментами (почта, файлы, календарь)","MCP (подключение внешних сервисов к агенту)","n8n / Make (автоматизация процессов)","Корпоративные контуры для работы с ИИ"];
 var TASKS = ["План-факт, отчётность по проектам","Работа со сметами","Анализ КП поставщиков","Договоры, протоколы разногласий","Переписка с заказчиками и подрядчиками","Протоколы совещаний и планерок","Отчёты с объектов","Анализ резюме, подбор персонала","Подготовка регламентов и внутренних документов","Расчёты заработной платы и премий"];
 var SCALE = ["Знаю и пробовал(а)","Слышал(а)","Не знакомо"];
+var CONCERNS = ["Безопасность данных и утечки","Замещение людей и рабочих мест","Фактическая точность: ошибки и галлюцинации","Люди разучатся думать самостоятельно","Юридические и этические риски","Зависимость от зарубежных сервисов","Расходы без ощутимого эффекта","Информационная перегрузка","Сложность контроля за результатом","Ничего не беспокоит","Другое"];
+var TRUST = ["Понятные правила безопасности и обезличивания","Примеры коллег с измеримым эффектом","Возможность всегда проверить результат","Корпоративный контур или свой сервер","Обучение и поддержка на рабочем месте","Убедить сложно","Другое"];
+var SOURCES = ["Соцсети и Telegram-каналы","Коллеги и рабочие обсуждения","СМИ и новостные сайты","Курсы и вебинары","Личный опыт и эксперименты","Не слежу за темой"];
 
 function buildGrid(tableId, items, namePrefix) {
   var t = document.getElementById(tableId);
@@ -224,6 +258,32 @@ function buildGrid(tableId, items, namePrefix) {
       tr.appendChild(td);
     });
     t.appendChild(tr);
+  });
+}
+
+function buildChecks(wrapId, items, name, max, errText) {
+  var wrap = document.getElementById(wrapId);
+  items.forEach(function(item) {
+    var label = document.createElement("label");
+    label.className = "opt";
+    var cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.name = name;
+    cb.value = item;
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(item));
+    wrap.appendChild(label);
+  });
+  wrap.addEventListener("change", function(e) {
+    if (e.target.name !== name) return;
+    var checked = wrap.querySelectorAll("input[name='" + name + "']:checked");
+    if (checked.length > max) {
+      e.target.checked = false;
+      var err = document.getElementById("err");
+      err.textContent = errText;
+      err.style.display = "block";
+      setTimeout(function(){ err.style.display = "none"; }, 2500);
+    }
   });
 }
 
@@ -255,6 +315,9 @@ function buildTasks() {
 
 buildGrid("modelsGrid", MODELS, "models");
 buildGrid("instrumentsGrid", INSTRUMENTS, "instruments");
+buildChecks("concernsWrap", CONCERNS, "concerns", 5, "Не более 5 пунктов");
+buildChecks("trustWrap", TRUST, "trust_factors", 3, "Не более 3 пунктов");
+buildChecks("sourcesWrap", SOURCES, "info_sources", 0, "");
 buildTasks();
 
 function collectGrid(namePrefix) {
@@ -288,6 +351,11 @@ document.getElementById("survey").addEventListener("submit", function(e) {
     models: collectGrid("models"),
     instruments: collectGrid("instruments"),
     agents_experience: form.agents_experience.value,
+    ai_attitude: form.ai_attitude.value,
+    concerns: checked("concerns"),
+    trust_factors: checked("trust_factors"),
+    info_sources: checked("info_sources"),
+    skepticism_experience: form.skepticism_experience.value.trim(),
     top_tasks: checked("top_tasks"),
     routine_hours: form.routine_hours.value,
     priority_task: form.priority_task.value.trim(),
